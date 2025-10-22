@@ -20,7 +20,7 @@ class Player
     @x += @joystick.get_x(1)
     @y += @joystick.get_y(1)
 
-    if @joystick.button_pressed?(4)
+    if @joystick.laser_button_pressed?
       self.fire_lasers()
     end
 
@@ -65,29 +65,43 @@ class WrappedSidewinderJoystick
         @joystick.get_y_axis(stick_id)
     end
 
-    def button_pressed?(button_id)
-        if @joystick.button(button_id) == BUTTON_DOWN
+    def laser_button_pressed?
+        if @joystick.button(4) == BUTTON_DOWN
             true
         else
             false
         end
     end
 
-class WrappendXboxGamepad
+class WrappedXboxGamepad
     def initialize
       @gamepad = XboxGamepad.new
     end
 
     def get_x(stick_id)
-      @gamepad.get_x_axis(stick_id)
+      value = @gamepad.get_x_axis(stick_id)
+      if value < 0
+        value = value / -128
+      end
+      if value >= 0
+        value = value / 127
+      end
+      value
     end
 
     def get_y(stick_id)
-      @gamepad.get_y_axis(stick_id)
+      value = @gamepad.get_y_axis(stick_id)
+      if value < 0
+        value = value / -128
+      end
+      if value >= 0
+        value = value / 127
+      end
+      value
     end
 
-    def button_pressed?(button_id)
-      if @gamepad.button(button_id) == 1.0
+    def laser_button_pressed?
+      if @gamepad.button(4) == 1.0
         true
       else
         false
