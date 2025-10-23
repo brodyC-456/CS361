@@ -16,15 +16,19 @@ end
 
 def audit_sanity(bedtime_mental_state)
   return 0 unless bedtime_mental_state.auditable?
-  if bedtime_mental_state.audit!.ok?
+
+  begin 
+    bedtime_mental_state.audit!
     MorningMentalState.new(:ok)
-  else 
+  rescue Exception
     MorningMentalState.new(:not_ok)
+    puts "Error: External Service is Offline"
   end
+
 end
 
 if audit_sanity(bedtime_mental_state) == 0
-  puts "error"
+  raise Exception, "External Service is Offline"
 else
   new_state = audit_sanity(bedtime_mental_state)
 end
@@ -38,7 +42,7 @@ class BedtimeMentalState < MentalState ; end
 class MorningMentalState < MentalState ; end
 
 def audit_sanity(bedtime_mental_state)
-  return nil unless bedtime_mental_state.auditable?
+  return 0 unless bedtime_mental_state.auditable?
   if bedtime_mental_state.audit!.ok?
     MorningMentalState.new(:ok)
   else 
@@ -47,6 +51,8 @@ def audit_sanity(bedtime_mental_state)
 end
 
 new_state = audit_sanity(bedtime_mental_state)
+if new_state == 0
+    raise Exception, "Audit Failed"
 new_state.do_work
 
 #-------------------------------------------------------------
@@ -55,7 +61,25 @@ new_state.do_work
 
 require 'candy_service'
 
-machine = CandyMachine.new
+class WrappedCandyMachine
+    def initialize
+        @machine = CandyMachine.new
+    end
+
+    def prepare
+        @machine.prepare
+    end
+
+    def ready?
+        @machine.ready?
+    end
+
+    def make!
+        @machine.make!
+    end
+
+machine = WrappedCandyMachine.new
+
 machine.prepare
 
 if machine.ready?
