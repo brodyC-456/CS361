@@ -22,7 +22,7 @@ class DataManager
 end
 
 fake_connection = MockNetConnection.new
-real_connection = NetworkConnection.new
+real_connection = NetworkConnection.new("example.com")
 # TODO: Make DataManager behave differently if testing
 if testing
     dm = DataManager.new(fake_connection)
