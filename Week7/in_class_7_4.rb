@@ -120,7 +120,8 @@ class Weather
   end
 end
 
-w = Weather.new
+api = WrappedGoogleWeather.new
+w = Weather.new(api)
 
 puts w.weather_summary(97701)
 puts w.weather_summary(95959)
