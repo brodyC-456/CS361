@@ -86,9 +86,9 @@ class WrappedPirateWeather
 
     def get_temperature(scale)
         @temp_in_c = @pirateWeather = get_temperature(@location)
-        if scale == GoogleWeatherAPI::Celcius
+        if scale == "celcius"
             @temp_in_c
-        elsif scale == GoogleWeatherAPI::Fahrenheit
+        elsif scale == "farenheit"
             @pirateWeather.c_to_f(@temp_in_c)
         end
     end
@@ -112,7 +112,7 @@ class Weather
 
   def weather_summary(zip)
     @weather_api.set_location(zip)
-    temp = @weather_api.get_temperature(GoogleWeatherAPI::FAHRENHEIT)
+    temp = @weather_api.get_temperature("farenheit")
     sky = @weather_api.get_sky_conditions()
     wind = @weather_api.get_wind()
 
