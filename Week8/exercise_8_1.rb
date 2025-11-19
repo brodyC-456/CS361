@@ -40,8 +40,8 @@ class Chess
 
   def play()
     puts "Players in the chess game:"
-    puts "#{player1.name}: #{player1.color}"
-    puts "#{player2.name}: #{player2.color}"
+    puts "#{@player1.name}: #{@player1.color}"
+    puts "#{@player2.name}: #{@player2.color}"
     # [pretend there's code here]
   end
 
@@ -52,8 +52,7 @@ end
 
 class GoPlayer
   attr_reader :name, :color
-
-  def initialize(player1, player2)
+  def initialize(name, color)
     @name = name
     @color = color
   end
@@ -67,8 +66,8 @@ class Go
 
   def play()
     puts "Players in the go game:"
-    puts "#{player1.name}: #{player1.color}"
-    puts "#{player2.name}: #{player2.color}"
+    puts "#{@player1.name}: #{@player1.color}"
+    puts "#{@player2.name}: #{@player2.color}"
     # [pretend there's code here]
   end
 
@@ -79,10 +78,8 @@ end
 
 class PlayGames
 
-  def initialize(game, player_list)
+  def initialize(game)
     @game = game
-    @player_list = player_list
-    
   end
 
   def play()
@@ -93,19 +90,21 @@ class PlayGames
 end
 
 
-poker1 = Poker.new(["alice", "bob", "chris", "dave"])
-pg = PlayGames.new(poker)
-pg.play
+poker = Poker.new(["alice", "bob", "chris", "dave"])
+pg1 = PlayGames.new(poker)
+pg1.play
 
 chess_p1 = ChessPlayer.new("alice", "white")
 chess_p2 = ChessPlayer.new("bob", "black")
-pg = PlayGames.new(chess_p1, chess_p2)
-pg.play
+chess = Chess.new(chess_p1, chess_p2)
+pg2 = PlayGames.new(chess)
+pg2.play
 
 go_p1 = GoPlayer.new("alice", "white")
 go_p2 = GoPlayer.new("bob", "black")
-pg = PlayGames.new(go_p1, go_p2)
-pg.play
+go = Go.new(go_p1, go_p2)
+pg3 = PlayGames.new(go)
+pg3.play
 
 # When refactoring this code, I was focusing on defining a clear interface for all the games so that they could be
 # played using one consistent block of code in the PlayGames class. I did this by renaming the functions to be consistent and by
